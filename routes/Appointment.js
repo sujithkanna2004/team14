@@ -45,3 +45,28 @@ router.get('/appointments', async (req, res) => {
     }
 });
 
+router.put('/appointments/:id', async (req, res) => {
+    try {
+        const appointment = await Appointment.findByIdAndUpdate(req.params.id, { status: req.body.status }, { new: true, runValidators: true });
+        if (!appointment) {
+            return res.status(404).send({ message: 'Appointment not found' });
+        }
+        res.send(appointment);
+    } catch (error) {
+        res.status(400).send(error);
+    }
+});
+
+
+router.delete('/appointments/:id', async (req, res) => {
+    try {
+        const appointment = await Appointment.findByIdAndDelete(req.params.id);
+        if (!appointment) {
+            return res.status(404).send({ message: 'Appointment not found' });
+        }
+        res.send({ message: 'Appointment canceled successfully' });
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
